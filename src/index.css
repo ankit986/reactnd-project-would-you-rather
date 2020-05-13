@@ -28,6 +28,16 @@ a {
   position: relative;
 }
 
+.btn-nav {
+  text-transform: uppercase;
+  padding: 10px;
+  border: 1px solid rgba(0,0,0,.29);
+  cursor: pointer;
+  background: #fff;
+  font-size: 16px;
+  position: relative;
+}
+
 .btn:hover {
   border-color: rgba(0,0,0,.5);
   text-decoration: none;
@@ -69,9 +79,10 @@ li {
 }
 
 .avatar {
-  height: 50px;
+  height: 35px;
   border-radius: 25px;
-  margin: 10px;
+  margin-left: 10px;
+  margin-right : 10px;
 }
 
 .question-overview {
@@ -84,6 +95,8 @@ li {
   border-radius: 3px;
   cursor: pointer;
 }
+
+
 
 .tweet-info {
   margin: 10px;
@@ -159,4 +172,17 @@ li {
 }
 .login-image{
   width: 200px;
+}
+
+
+
+.notfound {
+  max-width: 100%;
+  width: 100%;
+  line-height: 1.4;
+  padding: 110px 40px;
+  text-align: center;
+  background: #fff;
+  -webkit-box-shadow: 0 15px 15px -10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 15px 15px -10px rgba(0, 0, 0, 0.1);
 }

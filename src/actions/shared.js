@@ -5,7 +5,7 @@ import { setAuthedUser } from "./setAuthedUser";
 import {_saveQuestionAnswer, _saveQuestion} from '../util/_DATA'
 import { showLoading, hideLoading } from 'react-redux-loading';
 
-const id = 'sarahedo'
+const id = ''
 
 export function handleInitialData() {
     return (dispatch) => {

@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
-
+import { handleSetAuthedUser } from '../actions/setAuthedUser'
+import auth from '../util/auth';
 class NavBar extends Component {
+
     render() {
-        const handleClick=(e) =>{
+        const handleLogout = (e) => {
             e.preventDefault();
+            this.props.dispatch(handleSetAuthedUser(''))
+            auth.logout(() => this.props.history.push('/'))
+
         }
+
+        const handleLogin = (e) => {
+            e.preventDefault();
+            this.props.history.push('/login')
+        }
+
+
         return (
             <div className='container'>
 
@@ -17,9 +29,9 @@ class NavBar extends Component {
                                 Home
                     </NavLink>
                         </li>
-                       
+
                         <li>
-                            <NavLink to='/newquestion' activeClassName='active'>
+                            <NavLink to='/add' activeClassName='active'>
                                 New Question
                     </NavLink>
                         </li>
@@ -28,20 +40,21 @@ class NavBar extends Component {
                                 LeaderBoard
                     </NavLink>
                         </li>
-                        {this.props.authedUser === '' ?
-                            <li>Login</li>
-                            :
-                            <li>
-                                Hello,
-                            {this.props.userName}
-                                <img
-                                    alt={`Avatar of ${this.props.userName}`}
-                                    src={`${this.props.avatarURL}`}
-                                    className='avatar'
-                                />
-                                <button onClick={this.handleClick}>Logout</button>
-                            </li>
-                        }
+                        
+                            {!auth.isAuthenticated() ?
+                                <button className=' mr4-ns center btn-nav' onClick={handleLogin}>Login</button>
+                                :
+                                <li className='pa0 mr4-ns flex center'>
+                                   <span className='pt2'> Hello, {this.props.userName}</span>
+                                    <img
+                                        alt={`Avatar of ${this.props.userName}`}
+                                        src={`${this.props.avatarURL}`}
+                                        className='avatar'
+                                    />
+                                    <button className='btn-nav' onClick={handleLogout}>Logout</button>
+                                </li>
+                            }
+
                     </ul>
                 </nav>
             </div>
@@ -50,12 +63,10 @@ class NavBar extends Component {
 }
 
 function mapStateToProps({ authedUser, users }) {
-
     return {
-
-        userName: users[authedUser].name,
-        avatarURL: users[authedUser].avatarURL
+        userName: authedUser ? users[authedUser].name : '',
+        avatarURL: authedUser ? users[authedUser].avatarURL : ''
     }
 }
 
-export default connect(mapStateToProps)(NavBar);
+export default withRouter(connect(mapStateToProps)(NavBar));

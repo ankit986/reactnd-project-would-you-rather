@@ -1,42 +1,47 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Question from './Question'
-
+import { Redirect } from 'react-router-dom'
 class QuestionOverview extends Component {
-    state={
-        toQuestion: false
+    state = {
+        toQuestion: false,
+        toPoll: false
     }
 
-    handleClick= (e)=>{
+    handleClick = (e) => {
         e.preventDefault();
         this.setState({
-            toQuestion:true
+            toQuestion: this.props.isUnAnswered ? true : false,
+            toPoll:!this.state.toQuestion
         })
 
-        // Todo: goto question or to result
     }
     render() {
-        const { authorName, authorAvator, optionOneText } = this.props
-        if(this.state.toQuestion){
-            return <Question qid={this.props.qid} />
+        const { authorName, authorAvator, optionOneText, qid } = this.props
+        if (this.state.toQuestion) {
+            return <Redirect to={{ pathname: `/question/${qid}` }} />
+        }
+
+        if(this.state.toPoll){
+            return <Redirect to={{ pathname: `/poll/${qid}` }} />
+
         }
 
         return (
-            <div className='question-overview'>
-                <div className='author-name'>{authorName}</div>
-                <div className='details'>
-                    <div className='avatar-cover'>
+            <div className='center mw5 mw6-ns hidden ba mv2'>
+                <div className='f4 bg-near-black white mv0 pv2 ph3'>{authorName}</div>
+                <div className='flex'>
+                    <div className='br b--gray'>
                         <img
                             alt={authorName}
                             src={`${authorAvator}`}
-                            className='avatar'
+                            className='br-100 ma2 h4 w4 dib ba b--black-05 pa2'
                         />
                     </div>
-                    <div className='question-details'>
-        
+                    <div className='center'>
+
                         <h3>Would You Rather?</h3>
-                        <p>{optionOneText}</p>
-                        <button onClick={this.handleClick}>ViewPoll</button>
+                        <p className='f5 fw4 gray mt0'>{optionOneText}...</p>
+                        <button className='pa2 btn ma2' onClick={this.handleClick}>ViewPoll</button>
                     </div>
                 </div>
             </div>

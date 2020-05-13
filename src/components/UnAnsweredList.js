@@ -7,12 +7,13 @@ class UnAnsweredList extends Component {
         const { unansweredQuestionIds } = this.props
 
         return (
-            <div className="">
-                <h1>UnAnsweredList</h1>
+            <div className="ba b-gray center">
+
+                <h1 className='f2'>UnAnsweredList</h1>
                 <ul>
                     {unansweredQuestionIds.map(qid =>
                         <li key={qid}>
-                            <QuestionOverview qid={qid} />
+                            <QuestionOverview qid={qid} isUnAnswered={true}/>
                         </li>
                     )}
                 </ul>
@@ -24,11 +25,10 @@ class UnAnsweredList extends Component {
 
 
 function mapStateToProps({ users, questions, authedUser }) {
-    const user = users[authedUser]
-    const answers = user.answers
+    const answers = authedUser?users[authedUser].answers:{}
     const answeredQuestionIds = Object.keys(answers)
     const unansweredQuestionIds = Object.keys(questions)
-        .sort((a, b) => questions[a].timestamp - questions[b].timestamp)
+        .sort((a, b) => questions[b].timestamp - questions[a].timestamp)
         .filter(question => !answeredQuestionIds.includes(question))
     console.log('un', unansweredQuestionIds)
     

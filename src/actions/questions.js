@@ -1,4 +1,3 @@
-import { _saveQuestion } from "../util/_DATA";
 
 export const RECIEVE_QUESTIONS = 'RECIEVE_QUESTIONS';
 export const ADD_QUESTION = 'ADD_QUESTION';

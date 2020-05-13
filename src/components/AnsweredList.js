@@ -6,8 +6,8 @@ class AnsweredList extends Component {
     render() {
         const { answeredQuestionIds } = this.props
         return (
-            <div className="">
-                <h1>AnsweredList</h1>
+            <div className="ba b-gray  center">
+                <h1 className='f2'>AnsweredList</h1>
                 <ul>
                     {answeredQuestionIds.map(qid =>
                         <li key={qid}>
@@ -21,12 +21,11 @@ class AnsweredList extends Component {
 }
 
 function mapStateToProps({ users, questions, authedUser }) {
-    const user = users[authedUser]
-    const answers = user.answers
+    const answers = authedUser?users[authedUser].answers:{}
     const questionIds = Object.keys(answers)
     const answeredQuestionIds = Object.keys(questions)
-    .sort((a, b) => questions[a].timestamp - questions[b].timestamp)
-    .filter(question => questionIds.includes(question))
+        .sort((a, b) => questions[b].timestamp - questions[a].timestamp)
+        .filter(question => questionIds.includes(question))
     // console.log('answeredQuestionIds', answeredQuestionIds)
     return {
         answeredQuestionIds

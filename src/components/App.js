@@ -1,40 +1,57 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Login from './Login';
 import { handleInitialData } from "../actions/shared";
 import { connect } from 'react-redux'
 import Home from './Home';
 import LoadingBar from 'react-redux-loading'
 import NavBar from './NavBar'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import LeaderBoard from './LeaderBoard';
 import NewQuestion from './NewQuestion';
+import Question from './Question'
+import Poll from './Poll';
+import PrivateRoute from './PrivateRoute';
+import NotFound from './NotFound'
 
 class App extends Component {
   componentDidMount() {
     this.props.dispatch(handleInitialData())
   }
+  state = {
+    validUser: this.props.authedUser === undefined
+  }
   render() {
-    const {loading, userName, avatarURL} = this.props
+    const {  userName, avatarURL } = this.props
+    console.log('authedUser', this.props.authedUser)
+
     return (
       <BrowserRouter >
-        <div className="App">
-          {this.props.loading ? null :
-            <div>
-              <LoadingBar />
-              <NavBar authedUser={this.props.authedUser} userName = {userName} avatarURL={avatarURL}/>
-              <Route path='/' exact component={Home}/>
-              <Route path='/newquestion' component={NewQuestion}/>
-              <Route path='/leaderboard' component={LeaderBoard}/>
-            </div>
-          }
-        </div>
-      </BrowserRouter>
+        <Fragment>
+          <LoadingBar />
+          <NavBar authedUser={this.props.authedUser} userName={userName} avatarURL={avatarURL} />
+          <div>
 
+            {this.props.loading ? null :
+              <Switch >
+                <PrivateRoute path='/' exact component={Home} />
+                <PrivateRoute path='/add' component={NewQuestion} />
+                <PrivateRoute path='/leaderboard' component={LeaderBoard} />
+                <PrivateRoute path='/question/:qid' component={Question} />
+                <PrivateRoute path='/poll/:qid' component={Poll} />
+                <Route path='/login' component={Login} />
+                <Route path='*' component={NotFound} />
+              </Switch>
+            }
+          </div>
+
+        </Fragment>
+      </BrowserRouter>
     );
   }
 }
 
 function mapStateToProps({ authedUser }) {
+  console.log('a', authedUser)
 
   return {
     loading: authedUser === null,

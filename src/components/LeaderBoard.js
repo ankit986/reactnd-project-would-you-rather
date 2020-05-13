@@ -22,7 +22,7 @@ class Result extends Component {
 
 
 
-function mapStateToProps({ users, questions, authedUser }) {
+function mapStateToProps({ users  }) {
     const userMapScore = []
     for (let user in users) {
         let totalScore = Object.keys(users[user].answers).length + users[user].questions.length;
