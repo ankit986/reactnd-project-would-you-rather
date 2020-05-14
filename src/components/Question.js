@@ -20,6 +20,11 @@ class Question extends Component {
             })
         }
 
+        if(authorName===undefined){
+            return <Redirect to={{ pathname: `/notfound` }} />
+            
+        }
+
         if (this.state.toResult)
             return <Redirect to={{ pathname: `/poll/${this.props.qid}` }} />
         return (
@@ -83,13 +88,12 @@ class Question extends Component {
 function mapStateToProps({ users, questions, authedUser }, props) {
     const { qid } = props.match.params
     const question = questions[qid];
-    console.log('qid', qid)
 
-    const author = users[question.author];
+    const author = question?users[question.author]:{};
     const authorName = author.name
     const authorAvatar = author.avatarURL;
-    const optionOne = question.optionOne.text;
-    const optionTwo = question.optionTwo.text;
+    const optionOne = question?question.optionOne.text:'';
+    const optionTwo = question?question.optionTwo.text:'';
 
     return {
         qid,

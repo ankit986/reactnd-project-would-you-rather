@@ -1,65 +1,65 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { handleSetAuthedUser } from '../actions/setAuthedUser'
 import auth from '../util/auth';
-class NavBar extends Component {
 
-    render() {
-        const handleLogout = (e) => {
-            e.preventDefault();
-            this.props.dispatch(handleSetAuthedUser(''))
-            auth.logout(() => this.props.history.push('/'))
-
-        }
-
-        const handleLogin = (e) => {
-            e.preventDefault();
-            this.props.history.push('/login')
-        }
+function NavBar(props) {
 
 
-        return (
-            <div className='container'>
+    const handleLogout = (e) => {
+        e.preventDefault();
+        props.dispatch(handleSetAuthedUser(''))
+        auth.logout(() => props.history.push('/'))
 
-                <nav className='nav' >
-                    <ul >
-                        <li>
-                            <NavLink to='/' exact activeClassName='active'>
-                                Home
-                    </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink to='/add' activeClassName='active'>
-                                New Question
-                    </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to='/leaderboard' activeClassName='active'>
-                                LeaderBoard
-                    </NavLink>
-                        </li>
-                        
-                            {!auth.isAuthenticated() ?
-                                <button className=' mr4-ns center btn-nav' onClick={handleLogin}>Login</button>
-                                :
-                                <li className='pa0 mr4-ns flex center'>
-                                   <span className='pt2'> Hello, {this.props.userName}</span>
-                                    <img
-                                        alt={`Avatar of ${this.props.userName}`}
-                                        src={`${this.props.avatarURL}`}
-                                        className='avatar'
-                                    />
-                                    <button className='btn-nav' onClick={handleLogout}>Logout</button>
-                                </li>
-                            }
-
-                    </ul>
-                </nav>
-            </div>
-        )
     }
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        props.history.push('/login')
+    }
+
+
+    return (
+        <div className='container'>
+
+            <nav className='nav' >
+                <ul >
+                    <li>
+                        <NavLink to='/' exact activeClassName='active'>
+                            Home
+                    </NavLink>
+                    </li>
+
+                    <li>
+                        <NavLink to='/add' activeClassName='active'>
+                            New Question
+                    </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to='/leaderboard' activeClassName='active'>
+                            LeaderBoard
+                    </NavLink>
+                    </li>
+
+                    {!auth.isAuthenticated() ?
+                        <button className=' mr4-ns center btn-nav' onClick={handleLogin}>Login</button>
+                        :
+                        <li className='pa0 mr4-ns flex center'>
+                            <span className='pt2'> Hello, {props.userName}</span>
+                            <img
+                                alt={`Avatar of ${props.userName}`}
+                                src={`${props.avatarURL}`}
+                                className='avatar'
+                            />
+                            <button className='btn-nav' onClick={handleLogout}>Logout</button>
+                        </li>
+                    }
+
+                </ul>
+            </nav>
+        </div>
+    )
 }
 
 function mapStateToProps({ authedUser, users }) {
