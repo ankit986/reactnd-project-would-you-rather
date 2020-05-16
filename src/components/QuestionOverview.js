@@ -16,7 +16,7 @@ class QuestionOverview extends Component {
     render() {
         const { authorName, authorAvator, optionOneText, qid } = this.props
         if (this.state.clicked) {
-            return <Redirect to={{ pathname: `/question/${qid}` }} />
+            return <Redirect to={{ pathname: `/questions/${qid}` }} />
         }
 
 

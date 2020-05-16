@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {Redirect} from 'react-router-dom' 
+import { Redirect } from 'react-router-dom'
 class Poll extends Component {
     render() {
         const { authorName, authorAvatar, optionOneLength, optionOneText, optionTwoText, optionTwoLength, optionSelected } = this.props
-        if(this.props.isInvalidQuestion){
-            return(
-             <Redirect to={{ pathname: `/notfound` }} />
+        if (this.props.isInvalidQuestion) {
+            return (
+                <Redirect to={{ pathname: `/notfound` }} />
             )
         }
+        const getPercentageVote = (obtained, total) => {
+            const percent = (obtained * 100) / (total);
+            const ans = Math.round(percent * 100) / 100
+            return ans;
+        }
+
 
         return (
             <div className='center mw5 mw6-ns hidden ba '>
@@ -37,10 +43,13 @@ class Poll extends Component {
                                 </div>
                                 : null
                             }
+                            <div className='b ba i '>
+                                {getPercentageVote(optionOneLength, optionOneLength + optionTwoLength)}% Votes
+                            </div>
                             <p>{optionOneLength} out of {optionOneLength + optionTwoLength} votes</p>
                         </div>
                         <hr />
-                        <div className={optionSelected === 'optionTwo' ?'ma3 bg-light-silver pa2':'ma3'}>
+                        <div className={optionSelected === 'optionTwo' ? 'ma3 bg-light-silver pa2' : 'ma3'}>
 
                             <span className='b'>{optionTwoText}</span>
                             {optionSelected === 'optionTwo' ?
@@ -51,6 +60,10 @@ class Poll extends Component {
                                 </div>
                                 : null
                             }
+
+                            <div className='b ba i '>
+                                {getPercentageVote(optionTwoLength, optionOneLength + optionTwoLength)}% Votess
+                            </div>
 
                             <p>{optionTwoLength} out of {optionOneLength + optionTwoLength} votes</p>
                         </div>
@@ -64,12 +77,12 @@ class Poll extends Component {
 
 
 
-function mapStateToProps({ users, questions, authedUser }, {qid}) {
+function mapStateToProps({ users, questions, authedUser }, { qid }) {
     const question = questions[qid];
 
-    if(!question){
-        return{
-            isInvalidQuestion:true
+    if (!question) {
+        return {
+            isInvalidQuestion: true
         }
     }
 
