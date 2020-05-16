@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { handleSaveQuestionAnswer } from '../actions/shared';
 import { Redirect } from 'react-router-dom'
+import Poll from './Poll';
 
 class Question extends Component {
     state = {
-        toResult: false
+        toPollComponent: false
     }
     render() {
         const { optionOne, optionTwo, authorName, authorAvatar } = this.props
@@ -16,17 +17,20 @@ class Question extends Component {
             const answer = option.value
             this.props.dispatch(handleSaveQuestionAnswer({ authedUser, qid, answer }))
             this.setState({
-                toResult: true
+                toPollComponent: true
             })
         }
 
-        if(authorName===undefined){
+
+        if (authorName === undefined) {
             return <Redirect to={{ pathname: `/notfound` }} />
-            
+
         }
 
-        if (this.state.toResult)
-            return <Redirect to={{ pathname: `/poll/${this.props.qid}` }} />
+        if (this.props.toPoll || this.state.toPollComponent) {
+            return <Poll qid={this.props.qid} />
+        }
+
         return (
             <div className='center mw5 mw6-ns hidden ba '>
                 <div className='f4 bg-near-black white  pv2'>
@@ -54,9 +58,9 @@ class Question extends Component {
                                     value={'optionOne'}
                                     name="option"
                                     checked={true}
-                                    onChange={()=>{}}
+                                    onChange={() => { }}
                                     className='mr1'
-                                /> 
+                                />
                                 <span className='fw3 pb2'>{optionOne}</span>
                                 <label className="db pb2 pt2 fw6 lh-copy f6" >OR</label>
                                 <input
@@ -89,13 +93,22 @@ function mapStateToProps({ users, questions, authedUser }, props) {
     const { qid } = props.match.params
     const question = questions[qid];
 
-    const author = question?users[question.author]:{};
+    if (!question) {
+        return {
+            isInvalidQuestion: true
+        }
+    }
+    const toPoll = question.optionOne.votes.includes(authedUser) ? true :
+        (question.optionTwo.votes.includes(authedUser) ? true : false)
+
+    const author = question ? users[question.author] : {};
     const authorName = author.name
     const authorAvatar = author.avatarURL;
-    const optionOne = question?question.optionOne.text:'';
-    const optionTwo = question?question.optionTwo.text:'';
+    const optionOne = question ? question.optionOne.text : '';
+    const optionTwo = question ? question.optionTwo.text : '';
 
     return {
+        toPoll,
         qid,
         authedUser: authedUser ? authedUser : null,
         authorName,

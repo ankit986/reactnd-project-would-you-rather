@@ -3,28 +3,22 @@ import { connect } from "react-redux";
 import { Redirect } from 'react-router-dom'
 class QuestionOverview extends Component {
     state = {
-        toQuestion: false,
-        toPoll: false
+        clicked: false,
     }
 
     handleClick = (e) => {
         e.preventDefault();
         this.setState({
-            toQuestion: this.props.isUnAnswered ? true : false,
-            toPoll:!this.state.toQuestion
+            clicked: true,
         })
 
     }
     render() {
         const { authorName, authorAvator, optionOneText, qid } = this.props
-        if (this.state.toQuestion) {
+        if (this.state.clicked) {
             return <Redirect to={{ pathname: `/question/${qid}` }} />
         }
 
-        if(this.state.toPoll){
-            return <Redirect to={{ pathname: `/poll/${qid}` }} />
-
-        }
 
         return (
             <div className='center mw5 mw6-ns hidden ba mv2'>

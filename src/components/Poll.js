@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-
+import {Redirect} from 'react-router-dom' 
 class Poll extends Component {
     render() {
         const { authorName, authorAvatar, optionOneLength, optionOneText, optionTwoText, optionTwoLength, optionSelected } = this.props
-        console.log(optionOneLength)
+        if(this.props.isInvalidQuestion){
+            return(
+             <Redirect to={{ pathname: `/notfound` }} />
+            )
+        }
+
         return (
             <div className='center mw5 mw6-ns hidden ba '>
                 <h1 className='f4 bg-gray white ma0 pv2'>Poll RESULT</h1>
@@ -59,9 +64,15 @@ class Poll extends Component {
 
 
 
-function mapStateToProps({ users, questions, authedUser }, props) {
-    const { qid } = props.match.params
+function mapStateToProps({ users, questions, authedUser }, {qid}) {
     const question = questions[qid];
+
+    if(!question){
+        return{
+            isInvalidQuestion:true
+        }
+    }
+
     const author = users[question.author];
     const authorName = author.name;
     const authorAvatar = author.avatarURL

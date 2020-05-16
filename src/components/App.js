@@ -9,7 +9,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import LeaderBoard from './LeaderBoard';
 import NewQuestion from './NewQuestion';
 import Question from './Question'
-import Poll from './Poll';
 import PrivateRoute from './PrivateRoute';
 import NotFound from './NotFound'
 
@@ -21,7 +20,7 @@ class App extends Component {
     validUser: this.props.authedUser === undefined
   }
   render() {
-    const {  userName, avatarURL } = this.props
+    const { userName, avatarURL } = this.props
     console.log('authedUser', this.props.authedUser)
 
     return (
@@ -37,7 +36,6 @@ class App extends Component {
                 <PrivateRoute path='/add' component={NewQuestion} />
                 <PrivateRoute path='/leaderboard' component={LeaderBoard} />
                 <PrivateRoute path='/question/:qid' component={Question} />
-                <PrivateRoute path='/poll/:qid' component={Poll} />
                 <Route path='/login' component={Login} />
                 <Route path='*' component={NotFound} />
               </Switch>
